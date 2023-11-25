@@ -14,12 +14,32 @@ Office.onReady((info) => {
 });
 
 export async function run() {
- // Call the FastApi backend at http://127.0.0.1:8000/
-  const response = await fetch("http://127.0.0.1:8000/")
-    .catch(rejected => {
-      console.log(rejected);
-    });;
-  const data = await response.json();
-  console.log(data);
-  document.getElementById("response").innerHTML = data.message;
+  //get the email body
+  let emailBody = '';
+  Office.context.mailbox.item.body.getAsync("text", function (result) {
+    if (result.status === Office.AsyncResultStatus.Succeeded) {
+      emailBody = result.value;
+      logSomehting(emailBody)
+    }
+    else {
+      logSomehting(result.error.message);
+    }
+  })
+  
+  function logSomehting(emailBody){
+    console.log(emailBody);
+    sendEmailToBackend(emailBody);
+  }
+
+  async function sendEmailToBackend(emailBody) {
+    // Call the FastApi backend at http://127.0.0.1:8000/
+    const response = await fetch("http://127.0.0.1:8000/api/email?body=" + emailBody)
+      .catch(rejected => {
+        console.log(rejected);
+      });;
+    const data = await response.json();
+    console.log(data);
+    document.getElementById("response").innerHTML = `email has ${data.character_count} characters`;
+  }
 }
+
