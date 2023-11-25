@@ -14,7 +14,12 @@ Office.onReady((info) => {
 });
 
 export async function run() {
-  /**
-   * Insert your Outlook code here
-   */
+ // Call the FastApi backend at http://127.0.0.1:8000/
+  const response = await fetch("http://127.0.0.1:8000/")
+    .catch(rejected => {
+      console.log(rejected);
+    });;
+  const data = await response.json();
+  console.log(data);
+  document.getElementById("response").innerHTML = data.message;
 }
