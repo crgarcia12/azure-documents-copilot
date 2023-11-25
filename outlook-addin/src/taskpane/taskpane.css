@@ -63,16 +63,28 @@
  
  .ms-welcome__action.ms-Button--hero {
      margin-top: 30px;
+     background-color: #e60000;
+     color: white;
  }
  
 .ms-Button.ms-Button--hero .ms-Button-label {
-  color: #e60000;
+   background-color: #e60000;
+   padding-right: 24px;
+   padding-left: 24px;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   color: white;
 }
 
 .ms-Button.ms-Button--hero:hover .ms-Button-label,
 .ms-Button.ms-Button--hero:focus .ms-Button-label{
-  color: #e60000;
+  background-color: #e60000;
+  color: white;
   cursor: pointer;
+}
+
+.waiting {
+    align-items: center;
 }
 
 b {

@@ -30,16 +30,12 @@
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
         <h2 class="ms-font-xl"> What can I do for you?</h2>
-        <input type="text" id="question" name="question" value="What is the legal status of the contract with ID 1234?" style="width: 100%; height: 50px; font-size: 20px;">
-        
         <ul class="ms-List ms-welcome__features">
-            <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon--Ribbon ms-font-xl"></i>
-                <span class="ms-font-m">Learn what can the AI Assitant do for you!</span>
-            </li>
-            <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon-- ms-font-xl"></i>
-                <p id="response">Loading...</p>
+            <li class="ms-ListItem" id="loading">
+                <input class="ms-font-m" type="text" id="question" name="question" value="What is the legal status of the contract with ID 1234?" style="width: 100%; height: 50px; font-size: 20px;">
+                <div role="button" id="ask" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+                    <span class="ms-Button-label">Ask</span>
+                </div>
             </li>
             <li class="ms-ListItem">
                 <i class="ms-Icon ms-Icon--Unlock ms-font-xl"></i>
@@ -50,9 +46,12 @@
                 <span class="ms-font-m">Create and visualize like a pro</span>
             </li>
         </ul>
-        <p class="ms-font-l">Modify the source files, then click <b>Run</b>.</p>
-        <div role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
-            <span class="ms-Button-label">Run</span>
+        <img class="ms-font-m" width="60" height="60" id="response-image" src="../../assets/loading.gif"/>
+        <div class="ms-font-m" id="response-text">
+
+        </div>
+        <div role="button" id="analyze" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+            <span class="ms-Button-label">Analyze</span>
         </div>
     </main>
 </body>
