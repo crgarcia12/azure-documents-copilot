@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "core-js": "^3.9.1",
+    "langchain": "^0.0.197-rc.1",
     "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
