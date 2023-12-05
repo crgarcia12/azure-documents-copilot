@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 import os
+import requests
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
-from openai import AzureOpenAI
 load_dotenv() 
 
-### Chain definition
+from openai import AzureOpenAI
 
 templateAnswer = """You are a helpful assistant for lawyers, talking lawyer language.
 A lawyer will receive an email, and you to create an answer for that email.
@@ -80,6 +80,25 @@ async def health_probe():
 async def chat_message(message: str):
      print("Called chat_message {message}")
 
+@app.get("/api/sign_contract")
+async def sign_contract(message: str):
+    print("Called sign_contract {message}")
+
+    data = [{
+        "op": "add",
+        "path": "/fields/System.Title",
+        "value": "Another contract"
+    }]
+
+    personal_access_token = os.getenv("AZURE_DEVOPS_PAT")
+    url = os.getenv("AZURE_DEVOPS_URL")
+    r = requests.post(url, json=data, 
+        headers={'Content-Type': 'application/json-patch+json'},
+        auth=('', personal_access_token)
+    )
+
+    print(r.json())
+    return "https://dev.azure.com/crgarcia/Legal-iSign/_boards/board/t/Legal-iSign%20Team/Epics/?workitem={wit_id}".format(wit_id=r.json()["id"])
 
 if __name__ == "__main__":
     import uvicorn
