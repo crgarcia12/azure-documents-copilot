@@ -1,47 +1,35 @@
 #!/usr/bin/env python
 import os
-from typing import List
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
+from openai import AzureOpenAI
 load_dotenv() 
-
-# Langchain
-from langchain.prompts import ChatPromptTemplate
-from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
-from langchain.schema import BaseOutputParser
-from langserve import add_routes
-
-# Set Debug
-from langchain.globals import set_debug, set_verbose
-import langchain
-langchain.verbose = True
-set_debug(True)
-set_verbose(True)
-
 
 ### Chain definition
 
-template = """You are a helpful assistant for lawyers, talking lawyer language.
+templateAnswer = """You are a helpful assistant for lawyers, talking lawyer language.
 A lawyer will receive an email, and you to create an answer for that email.
 Always point to the law and the facts.
 """
 
+templateDetectIntention = """You are a helpful assistant for lawyers, talking lawyer language."""
+
+message_text = [
+    {"role":"system","content":"""
+You are an intention detection bot. 
+you will receive emails and need to detect the intention from the table bellow:
+1.contract_status: get information on the status of a contract.
+2.contract_sign: get a contract signed.
+3.not_supported: any other intention
+Reply just with a json on the format: {"intention":"<the-intention>"}."""}]
+
+
 human_template = "This is the email content: {email_content}"
 
-chat_prompt = ChatPromptTemplate.from_messages([
-    ("system", template),
-    ("human", human_template),
-])
-answer_email_chain = chat_prompt | AzureChatOpenAI(
-    model_name="gpt-4",
-    azure_deployment="gpt-4-0613-learning-cae",
-    api_version="2023-07-01-preview"
-)
-
-# App definition
+# App definition  
 
 app = FastAPI(
     title="Legal AI Assistant",
@@ -59,17 +47,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-add_routes(
-    app,
-    answer_email_chain,
-    path="/answer_email",
-)
-
-@app.get("/api/email_count")
+@app.get("/api/email_intention")
 async def count_characters(body: str):
     character_count = len(body)
     print("Called with email <{character_count}>: {body}")
-    return {"character_count": character_count}
+    
+    msg = message_text.copy()
+    msg.append({"role":"user","content":human_template.format(email_content=body)})
+    
+    client = AzureOpenAI(
+        azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT"), 
+        api_key=os.getenv("AZURE_OPENAI_KEY"),  
+        # 2023-10-01-preview
+        api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+    )
+
+    response = client.chat.completions.create(
+        model=os.getenv("AZURE_OPENAI_MODEL_NAME"),
+        messages=msg, 
+        max_tokens=500
+    )
+    print(response.choices[0].message.content)
+    return response.choices[0].message.content
+
 
 @app.get("/api/healthz")
 async def health_probe():
@@ -77,11 +78,9 @@ async def health_probe():
 
 @app.post("/api/chat_message")
 async def chat_message(message: str):
-    character_count = len(body)
-    print("Called with email <{character_count}>: {body}")
-    return {"character_count": character_count}
+     print("Called chat_message {message}")
+
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="localhost", port=8000)

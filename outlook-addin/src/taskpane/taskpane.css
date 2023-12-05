@@ -62,7 +62,8 @@
  }
  
  .ms-welcome__action.ms-Button--hero {
-     margin-top: 30px;
+     margin-top: 10px;
+     margin-bottom: 5px;
      background-color: #e60000;
      color: white;
  }
@@ -71,20 +72,30 @@
    background-color: #e60000;
    padding-right: 24px;
    padding-left: 24px;
-   padding-top: 10px;
-   padding-bottom: 10px;
+   padding-top: 5px;
+   padding-bottom: 5px;
    color: white;
+   margin-top: 0px;
 }
 
 .ms-Button.ms-Button--hero:hover .ms-Button-label,
 .ms-Button.ms-Button--hero:focus .ms-Button-label{
   background-color: #e60000;
+  margin-top: 0px;
+  padding-top: 0px;
   color: white;
   cursor: pointer;
+  width: auto;
 }
 
 .waiting {
     align-items: center;
+}
+
+input {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 b {

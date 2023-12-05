@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" cgontent="width=device-width, initial-scale=1">
     <title>Legal Assistant</title>
 
     <!-- Office JavaScript API -->
@@ -28,11 +28,11 @@
     <section id="sideload-msg" class="ms-welcome__main">
         <h2 class="ms-font-xl">Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> your add-in to see app body.</h2>
     </section>
-    <main id="app-body" class="ms-welcome__main" style="display: none;">
+    <main id="app-body" class="ms-welcome__main" style="display:none;">
         <h2 class="ms-font-xl"> What can I do for you?</h2>
         <ul class="ms-List ms-welcome__features">
             <li class="ms-ListItem" id="loading">
-                <input class="ms-font-m" type="text" id="question" name="question" value="What is the legal status of the contract with ID 1234?" style="width: 100%; height: 50px; font-size: 20px;">
+                <input class="ms-font-m" type="text" id="question" name="question" value="What is the legal status of the contract with ID 1234?"> <!-- style="width: 100%; height: 50px; font-size: 20px;"> -->
                 <div role="button" id="ask" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
                     <span class="ms-Button-label">Ask</span>
                 </div>
@@ -48,9 +48,6 @@
         </ul>
         <div class="ms-font-m" id="response">
             <img class="ms-font-m" width="60" height="60" id="response-image" src="../../assets/loading.gif"/>
-        </div>
-        <div role="button" id="analyze" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
-            <span class="ms-Button-label">Analyze</span>
         </div>
     </main>
 </body>
